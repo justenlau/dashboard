@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Justen — Life Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #171717;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --border2: #333;
+    --text: #e8e8e8;
+    --muted: #666;
+    --muted2: #444;
+    --accent-green: #4ade80;
+    --accent-amber: #fbbf24;
+    --accent-blue: #60a5fa;
+    --accent-coral: #f87171;
+    --accent-purple: #a78bfa;
+    --accent-teal: #2dd4bf;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.5;
+    padding: 2rem 1.5rem;
+    min-height: 100vh;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .header-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .header-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+  }
+
+  .card-wide {
+    grid-column: 1 / -1;
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: .04em;
+  }
+
+  .pill-green { background: rgba(74,222,128,.12); color: var(--accent-green); border: 0.5px solid rgba(74,222,128,.25); }
+  .pill-amber { background: rgba(251,191,36,.12); color: var(--accent-amber); border: 0.5px solid rgba(251,191,36,.25); }
+  .pill-blue  { background: rgba(96,165,250,.12); color: var(--accent-blue);  border: 0.5px solid rgba(96,165,250,.25); }
+  .pill-coral { background: rgba(248,113,113,.12); color: var(--accent-coral); border: 0.5px solid rgba(248,113,113,.25); }
+  .pill-muted { background: rgba(255,255,255,.05); color: var(--muted); border: 0.5px solid var(--border2); }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .row:last-child { border-bottom: none; }
+
+  .row-label {
+    color: var(--muted);
+    font-size: 12px;
+    flex: 1;
+  }
+
+  .row-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    text-align: right;
+  }
+
+  .row-val.green  { color: var(--accent-green); }
+  .row-val.amber  { color: var(--accent-amber); }
+  .row-val.blue   { color: var(--accent-blue); }
+  .row-val.coral  { color: var(--accent-coral); }
+  .row-val.purple { color: var(--accent-purple); }
+  .row-val.teal   { color: var(--accent-teal); }
+  .row-val.muted  { color: var(--muted); }
+
+  .big-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .big-label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .stat {
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--border);
+    margin: 12px 0;
+  }
+
+  .zone-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .zone-row:last-child { border-bottom: none; }
+
+  .zone-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .zone-name {
+    display: flex;
+    align-items: center;
+    color: var(--muted);
+    font-size: 12px;
+    flex: 1;
+  }
+
+  .race-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .race-item:last-child { border-bottom: none; }
+
+  .race-name { color: var(--text); font-size: 12px; }
+  .race-meta { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  .goal-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 12px;
+  }
+
+  .goal-row:last-child { border-bottom: none; }
+
+  .goal-prefix {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted2);
+    flex-shrink: 0;
+  }
+
+  .goal-text { color: var(--muted); flex: 1; }
+  .goal-text.active { color: var(--text); }
+
+  .streak-block {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .streak-num {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  .streak-unit {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .habits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .habit-card {
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+
+  .pb-wrap { margin-top: 8px; }
+  .pb-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .pb { height: 3px; background: var(--border2); border-radius: 2px; overflow: hidden; }
+  .pb-fill { height: 100%; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-name">Justen Lau &mdash; Life OS</span>
+  <span class="header-date" id="live-date"></span>
+</div>
+
+<div class="grid">
+
+  <!-- PERSONAL KPI -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">personal KPI</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="big-num green" id="d-networth">$75k</div>
+        <div class="big-label">net worth CAD</div>
+      </div>
+      <div class="stat">
+        <div class="big-num" style="color:var(--accent-teal)" id="d-bodyfat">11%</div>
+        <div class="big-label">body fat avg</div>
+      </div>
+      <div class="stat">
+        <div class="big-num purple" id="d-muscle">50.2</div>
+        <div class="big-label">muscle kg avg</div>
+      </div>
+    </div>
+    <div class="habits-grid">
+      <div class="habit-card">
+        <div class="big-label">no coli</div>
+        <div class="streak-block" style="margin-top:4px">
+          <span class="streak-num green" id="d-nocoli">3</span>
+          <span class="streak-unit">days</span>
+        </div>
+      </div>
+      <div class="habit-card">
+        <div class="big-label">read bible</div>
+        <div class="streak-block" style="margin-top:4px">
+          <span class="streak-num" style="color:var(--accent-amber)" id="d-bible">51</span>
+          <span class="streak-unit">days</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARATHON -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">marathon</span>
+      <span class="pill pill-amber" id="d-phase-pill">taper W-2</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="big-num green" id="d-target-race">3:29</div>
+        <div class="big-label">target Vancouver</div>
+      </div>
+      <div class="stat">
+        <div class="big-num" style="color:var(--accent-blue)" id="d-vo2max">56</div>
+        <div class="big-label">VO2max</div>
+      </div>
+    </div>
+    <div class="zone-row">
+      <span class="zone-name"><span class="zone-dot" style="background:#444"></span>Z1</span>
+      <span class="row-val muted" id="d-z1">6:25 /km</span>
+    </div>
+    <div class="zone-row">
+      <span class="zone-name"><span class="zone-dot" style="background:var(--accent-blue)"></span>Z2</span>
+      <span class="row-val blue" id="d-z2">5:25 /km</span>
+    </div>
+    <div class="zone-row">
+      <span class="zone-name"><span class="zone-dot" style="background:var(--accent-teal)"></span>MP</span>
+      <span class="row-val teal" id="d-mp">5:10–5:15 /km</span>
+    </div>
+    <div class="zone-row">
+      <span class="zone-name"><span class="zone-dot" style="background:var(--accent-amber)"></span>Z3</span>
+      <span class="row-val amber" id="d-z3">5:00 /km</span>
+    </div>
+    <div class="zone-row">
+      <span class="zone-name"><span class="zone-dot" style="background:var(--accent-coral)"></span>Z4</span>
+      <span class="row-val coral" id="d-z4">4:30 /km</span>
+    </div>
+    <hr class="divider">
+    <div class="race-item">
+      <div>
+        <div class="race-name" style="color:var(--accent-green)">Vancouver</div>
+        <div class="race-meta">May 3, 2026 &mdash; 10 days</div>
+      </div>
+      <div style="text-align:right">
+        <div class="race-name" style="font-family:var(--mono)">3:29 target</div>
+      </div>
+    </div>
+    <div class="race-item">
+      <div>
+        <div class="race-name">Toronto</div>
+        <div class="race-meta">Oct 2026</div>
+      </div>
+      <div style="text-align:right"><div class="race-meta">sub-3:00</div></div>
+    </div>
+    <div class="race-item">
+      <div>
+        <div class="race-name">LA Marathon</div>
+        <div class="race-meta">Mar 2027</div>
+      </div>
+      <div style="text-align:right"><div class="race-meta">B-race</div></div>
+    </div>
+    <div class="race-item">
+      <div>
+        <div class="race-name">Sulphur Springs 100k</div>
+        <div class="race-meta">May 2027</div>
+      </div>
+      <div style="text-align:right"><div class="race-meta">A-race</div></div>
+    </div>
+  </div>
+
+  <!-- SENOPATI -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">senopati</span>
+      <span class="pill pill-amber">pre-revenue</span>
+    </div>
+    <div class="row"><span class="row-label">active clients</span><span class="row-val coral" id="d-seno-clients">0</span></div>
+    <div class="row"><span class="row-label">employees</span><span class="row-val">Alfie + designer</span></div>
+    <div class="row"><span class="row-label">monthly revenue</span><span class="row-val coral" id="d-seno-rev">$0 CAD</span></div>
+    <div class="row"><span class="row-label">monthly spending</span><span class="row-val amber" id="d-seno-spend">$200 CAD</span></div>
+    <div class="row"><span class="row-label">cash reserve</span><span class="row-val coral" id="d-seno-cash">$0 CAD</span></div>
+    <div class="row"><span class="row-label">payroll trigger</span><span class="row-val muted">IDR 15jt reserve</span></div>
+    <hr class="divider">
+    <div class="goal-row"><span class="goal-prefix">01 &rarr;</span><span class="goal-text active">get first 5 clients</span></div>
+    <div class="goal-row"><span class="goal-prefix">02 &rarr;</span><span class="goal-text">monthly revenue USD 1,000</span></div>
+  </div>
+
+  <!-- MELLA PAINT -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">mella paint</span>
+      <span class="pill pill-green">active</span>
+    </div>
+    <div class="row"><span class="row-label">monthly ad spend</span><span class="row-val" id="d-mella-spend">IDR 10jt</span></div>
+    <div class="row"><span class="row-label">2026 revenue (ads)</span><span class="row-val green" id="d-mella-rev26">IDR 300jt</span></div>
+    <div class="row"><span class="row-label">2026 ad cost</span><span class="row-val" id="d-mella-cost26">IDR 21jt</span></div>
+    <div class="row"><span class="row-label">2026 cost/revenue</span><span class="row-val amber" id="d-mella-cr26">6%</span></div>
+    <div class="row"><span class="row-label">2025 revenue (ads)</span><span class="row-val muted" id="d-mella-rev25">IDR 3.3 miliar</span></div>
+    <div class="row"><span class="row-label">2025 ad cost</span><span class="row-val muted" id="d-mella-cost25">IDR 100jt</span></div>
+    <div class="row"><span class="row-label">2025 cost/revenue</span><span class="row-val muted" id="d-mella-cr25">3%</span></div>
+    <hr class="divider">
+    <div class="goal-row"><span class="goal-prefix">01 &rarr;</span><span class="goal-text active">hire digital strategy staff</span></div>
+    <div class="goal-row"><span class="goal-prefix">02 &rarr;</span><span class="goal-text">IDR 6 miliar annual revenue</span></div>
+  </div>
+
+  <!-- CITY OF TORONTO -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">city of toronto</span>
+      <span class="pill pill-blue">active</span>
+    </div>
+    <div class="row"><span class="row-label">role</span><span class="row-val">ETT1 · Local Roads</span></div>
+    <div class="row"><span class="row-label">hourly wage</span><span class="row-val">$46 CAD</span></div>
+    <div class="row"><span class="row-label">gross annual</span><span class="row-val green">$83,720 CAD</span></div>
+    <div class="row"><span class="row-label">target exit</span><span class="row-val amber">Apr 2027</span></div>
+    <div class="row"><span class="row-label">PMP eligible</span><span class="row-val muted">Sep 2027</span></div>
+  </div>
+
+  <!-- ACADEMIA -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">academia</span>
+      <span class="pill pill-blue">active</span>
+    </div>
+    <div class="row"><span class="row-label">formal study</span><span class="row-val" id="d-ppy">PPE · Year 3</span></div>
+    <div class="row"><span class="row-label">finish date</span><span class="row-val muted">TBA</span></div>
+    <div class="row"><span class="row-label">currently reading</span><span class="row-val" id="d-book" style="max-width:60%;text-align:right;white-space:normal;line-height:1.3">Girard &mdash; Deceit, Desire and the Novel</span></div>
+    <hr class="divider">
+    <div class="goal-row"><span class="goal-prefix">next &rarr;</span><span class="goal-text">Michigan Ross online MBA</span></div>
+    <div class="goal-row"><span class="goal-prefix">then &rarr;</span><span class="goal-text">Leeds Applied Ethics MA</span></div>
+  </div>
+
+  <!-- SANCTUARY -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">sanctuary</span>
+      <span class="pill pill-muted">on hold</span>
+    </div>
+    <div class="row"><span class="row-label">status</span><span class="row-val muted">deferred</span></div>
+    <div class="row"><span class="row-label">location</span><span class="row-val muted">Indonesia</span></div>
+    <div class="row"><span class="row-label">model</span><span class="row-val muted">village-level charity org</span></div>
+    <div class="row"><span class="row-label">prerequisite</span><span class="row-val muted">financial independence</span></div>
+  </div>
+
+</div>
+
+<script>
+  /* ============================================
+     EDIT YOUR NUMBERS HERE — nothing else needed
+     ============================================ */
+  const DATA = {
+    netWorth:       '75k CAD',
+    bodyFat:        '11%',
+    muscleMass:     '50.2 kg',
+    noColiStreak:   3,
+    bibleStreak:    51,
+    marathonPhase:  'taper W-2',
+    marathonPhaseColor: 'amber',
+    targetRace:     'Vancouver · 3:29',
+    vo2max:         56,
+    paceZ1:         '6:25 /km',
+    paceZ2:         '5:25 /km',
+    paceMP:         '5:10–5:15 /km',
+    paceZ3:         '5:00 /km',
+    paceZ4:         '4:30 /km',
+    senoClients:    0,
+    senoRevenue:    '$0 CAD',
+    senoSpending:   '$200 CAD',
+    senoCash:       '$0 CAD',
+    mellaAdSpend:   'IDR 10jt',
+    mellaRev26:     'IDR 300jt',
+    mellaCost26:    'IDR 21jt',
+    mellaCR26:      '6%',
+    mellaRev25:     'IDR 3.3 miliar',
+    mellaCost25:    'IDR 100jt',
+    mellaCR25:      '3%',
+    currentBook:    'Girard — Deceit, Desire and the Novel',
+    ppyYear:        'PPE · Year 3',
+  };
+
+  const d = new Date();
+  document.getElementById('live-date').textContent =
+    d.toLocaleDateString('en-CA', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('d-networth',     DATA.netWorth);
+  set('d-bodyfat',      DATA.bodyFat);
+  set('d-muscle',       DATA.muscleMass);
+  set('d-nocoli',       DATA.noColiStreak);
+  set('d-bible',        DATA.bibleStreak);
+  set('d-vo2max',       DATA.vo2max);
+  set('d-target-race',  DATA.targetRace);
+  set('d-z1',           DATA.paceZ1);
+  set('d-z2',           DATA.paceZ2);
+  set('d-mp',           DATA.paceMP);
+  set('d-z3',           DATA.paceZ3);
+  set('d-z4',           DATA.paceZ4);
+  set('d-seno-clients', DATA.senoClients);
+  set('d-seno-rev',     DATA.senoRevenue);
+  set('d-seno-spend',   DATA.senoSpending);
+  set('d-seno-cash',    DATA.senoCash);
+  set('d-mella-spend',  DATA.mellaAdSpend);
+  set('d-mella-rev26',  DATA.mellaRev26);
+  set('d-mella-cost26', DATA.mellaCost26);
+  set('d-mella-cr26',   DATA.mellaCR26);
+  set('d-mella-rev25',  DATA.mellaRev25);
+  set('d-mella-cost25', DATA.mellaCost25);
+  set('d-mella-cr25',   DATA.mellaCR25);
+  set('d-book',         DATA.currentBook);
+  set('d-ppy',          DATA.ppyYear);
+
+  const pill = document.getElementById('d-phase-pill');
+  if (pill) { pill.textContent = DATA.marathonPhase; pill.className = 'pill pill-' + DATA.marathonPhaseColor; }
+</script>
+
+</body>
+</html>
