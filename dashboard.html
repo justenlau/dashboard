@@ -252,14 +252,14 @@
       <div class="habit-card">
         <div class="big-label">no coli</div>
         <div class="streak-block" style="margin-top:4px">
-          <span class="streak-num" style="color:var(--accent-green)" id="d-nocoli">3</span>
+          <span class="streak-num" style="color:var(--accent-green)" id="d-nocoli">—</span>
           <span class="streak-unit">days</span>
         </div>
       </div>
       <div class="habit-card">
         <div class="big-label">read bible</div>
         <div class="streak-block" style="margin-top:4px">
-          <span class="streak-num" style="color:var(--accent-amber)" id="d-bible">51</span>
+          <span class="streak-num" style="color:var(--accent-amber)" id="d-bible">—</span>
           <span class="streak-unit">days</span>
         </div>
       </div>
@@ -407,8 +407,8 @@
     netWorth:           '75k CAD',
     bodyFat:            '11%',
     muscleMass:         '50.2',
-    noColiStreak:       3,
-    bibleStreak:        51,
+    noColiStart:        '2026-04-21',   /* date you last reset — YYYY-MM-DD */
+    bibleStart:         '2026-03-03',   /* date you started the streak — YYYY-MM-DD */
     marathonPhase:      'taper W-2',
     marathonPhaseColor: 'amber',
     targetRace:         'Vancouver \u00b7 3:29',
@@ -441,8 +441,9 @@
   set('d-networth',     DATA.netWorth);
   set('d-bodyfat',      DATA.bodyFat);
   set('d-muscle',       DATA.muscleMass);
-  set('d-nocoli',       DATA.noColiStreak);
-  set('d-bible',        DATA.bibleStreak);
+  const daysSince = (dateStr) => Math.floor((new Date() - new Date(dateStr)) / 86400000);
+  set('d-nocoli',       daysSince(DATA.noColiStart));
+  set('d-bible',        daysSince(DATA.bibleStart));
   set('d-vo2max',       DATA.vo2max);
   set('d-target-race',  DATA.targetRace);
   set('d-z1',           DATA.paceZ1);
