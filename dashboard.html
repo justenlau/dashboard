@@ -220,6 +220,50 @@
 
   .habits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .habit-card { background: var(--surface2); border-radius: 6px; padding: 10px 12px; }
+
+  .progress-block { margin-top: 12px; }
+  .progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .progress-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .progress-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+  }
+  .progress-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width .4s ease;
+  }
+  .progress-fill.green  { background: var(--accent-green); }
+  .progress-fill.amber  { background: var(--accent-amber); }
+  .progress-fill.blue   { background: var(--accent-blue); }
+  .progress-fill.coral  { background: var(--accent-coral); }
+  .progress-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted2);
+  }
 </style>
 </head>
 <body>
@@ -236,15 +280,15 @@
     <div class="card-head"><span class="card-label">personal KPI</span></div>
     <div class="stats-row">
       <div class="stat">
-        <div class="big-num" style="color:var(--accent-green)" id="d-networth">75k CAD</div>
+        <div class="big-num" style="color:var(--accent-green)" id="d-networth">77k CAD</div>
         <div class="big-label">net worth</div>
       </div>
       <div class="stat">
-        <div class="big-num" style="color:var(--accent-teal)" id="d-bodyfat">11%</div>
+        <div class="big-num" style="color:var(--accent-teal)" id="d-bodyfat">14.4%</div>
         <div class="big-label">body fat avg</div>
       </div>
       <div class="stat">
-        <div class="big-num" style="color:var(--accent-purple)" id="d-muscle">50.2</div>
+        <div class="big-num" style="color:var(--accent-purple)" id="d-muscle">49.6</div>
         <div class="big-label">muscle kg avg</div>
       </div>
     </div>
@@ -264,6 +308,20 @@
         </div>
       </div>
     </div>
+
+    <div class="progress-block">
+      <div class="progress-head">
+        <span class="progress-label">net worth &rarr; 100k</span>
+        <span class="progress-val" id="d-nw-pct">—</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill green" id="d-nw-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-foot">
+        <span id="d-nw-current">$0</span>
+        <span>$100,000 CAD</span>
+      </div>
+    </div>
   </div>
 
   <!-- MARATHON -->
@@ -274,7 +332,7 @@
     </div>
     <div class="stats-row">
       <div class="stat">
-        <div class="big-num" style="color:var(--accent-green);font-size:17px;line-height:1.2" id="d-target-race">Vancouver &middot; 3:38</div>
+        <div class="big-num" style="color:var(--accent-green);font-size:17px;line-height:1.2" id="d-target-race">Vancouver &middot; 3:29</div>
         <div class="big-label">next race target</div>
       </div>
       <div class="stat">
@@ -282,6 +340,21 @@
         <div class="big-label">VO2max</div>
       </div>
     </div>
+
+    <div class="progress-block" style="margin-bottom:14px">
+      <div class="progress-head">
+        <span class="progress-label">training &rarr; race day</span>
+        <span class="progress-val" id="d-train-val">—</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill amber" id="d-train-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-foot">
+        <span id="d-train-start">Nov 21, 2025</span>
+        <span id="d-train-end">May 3, 2026</span>
+      </div>
+    </div>
+
     <div class="zone-row">
       <span class="zone-name"><span class="zone-dot" style="background:var(--muted2)"></span>Z1</span>
       <span class="row-val muted" id="d-z1">6:25 /km</span>
@@ -306,9 +379,9 @@
     <div class="race-item">
       <div>
         <div class="race-name" style="color:var(--accent-green)">Vancouver</div>
-        <div class="race-meta">May 3, 2026</div>
+        <div class="race-meta">May 3, 2026 &mdash; <span id="d-race-countdown">10 days</span></div>
       </div>
-      <div style="text-align:right"><div class="race-meta" style="color:var(--accent-green)">3:38 target</div></div>
+      <div style="text-align:right"><div class="race-meta" style="color:var(--accent-green)">3:29 target</div></div>
     </div>
     <div class="race-item">
       <div><div class="race-name">Toronto</div><div class="race-meta">Oct 2026</div></div>
@@ -335,7 +408,6 @@
     <div class="row"><span class="row-label">monthly revenue</span><span class="row-val coral" id="d-seno-rev">$0 CAD</span></div>
     <div class="row"><span class="row-label">monthly spending</span><span class="row-val amber" id="d-seno-spend">$200 CAD</span></div>
     <div class="row"><span class="row-label">cash reserve</span><span class="row-val coral" id="d-seno-cash">$0 CAD</span></div>
-    <div class="row"><span class="row-label">runway</span><span class="row-val coral" id="d-seno-runway">0 months</span></div>
     <div class="row"><span class="row-label">payroll trigger</span><span class="row-val muted">IDR 15jt reserve</span></div>
     <hr class="divider">
     <div class="goal-row"><span class="goal-prefix">01 &rarr;</span><span class="goal-text active">get first 5 clients</span></div>
@@ -351,10 +423,10 @@
     <div class="row"><span class="row-label">monthly ad spend</span><span class="row-val" id="d-mella-spend">IDR 10jt</span></div>
     <div class="row"><span class="row-label">2026 revenue (ads)</span><span class="row-val green" id="d-mella-rev26">IDR 300jt</span></div>
     <div class="row"><span class="row-label">2026 ad cost</span><span class="row-val" id="d-mella-cost26">IDR 21jt</span></div>
-    <div class="row"><span class="row-label">2026 ROAS</span><span class="row-val green" id="d-mella-roas26">14.3x</span></div>
+    <div class="row"><span class="row-label">2026 cost/revenue</span><span class="row-val amber" id="d-mella-cr26">6%</span></div>
     <div class="row"><span class="row-label">2025 revenue (ads)</span><span class="row-val muted" id="d-mella-rev25">IDR 3.3 miliar</span></div>
     <div class="row"><span class="row-label">2025 ad cost</span><span class="row-val muted" id="d-mella-cost25">IDR 100jt</span></div>
-    <div class="row"><span class="row-label">2025 ROAS</span><span class="row-val muted" id="d-mella-roas25">33x</span></div>
+    <div class="row"><span class="row-label">2025 cost/revenue</span><span class="row-val muted" id="d-mella-cr25">3%</span></div>
     <hr class="divider">
     <div class="goal-row"><span class="goal-prefix">01 &rarr;</span><span class="goal-text active">hire digital strategy staff</span></div>
     <div class="goal-row"><span class="goal-prefix">02 &rarr;</span><span class="goal-text">IDR 6 miliar annual revenue</span></div>
@@ -406,13 +478,17 @@
      ============================================ */
   const DATA = {
     netWorth:           '77k CAD',
+    netWorthValue:      77000,             /* numeric, used for progress bar */
+    netWorthGoal:       100000,
     bodyFat:            '14.4%',
     muscleMass:         '49.6',
-    noColiStart:        '2026-04-24',   /* date you last reset — YYYY-MM-DD */
-    bibleStart:         '2026-03-03',   /* date you started the streak — YYYY-MM-DD */
-    marathonPhase:      'taper W-1',
+    noColiStart:        '2026-04-24',      /* date you last reset — YYYY-MM-DD */
+    bibleStart:         '2026-03-03',      /* date you started the streak */
+    marathonPhase:      'taper W-2',
     marathonPhaseColor: 'amber',
-    targetRace:         'Vancouver \u00b7 3:38',
+    targetRace:         'Vancouver \u00b7 3:29',
+    raceDay:            '2026-05-03',
+    trainingStart:      '2025-11-21',      /* training block start */
     vo2max:             56,
     paceZ1:             '6:25 /km',
     paceZ2:             '5:25 /km',
@@ -439,10 +515,11 @@
     d.toLocaleDateString('en-CA', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
 
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const daysSince = (dateStr) => Math.floor((new Date() - new Date(dateStr)) / 86400000);
+
   set('d-networth',     DATA.netWorth);
   set('d-bodyfat',      DATA.bodyFat);
   set('d-muscle',       DATA.muscleMass);
-  const daysSince = (dateStr) => Math.floor((new Date() - new Date(dateStr)) / 86400000);
   set('d-nocoli',       daysSince(DATA.noColiStart));
   set('d-bible',        daysSince(DATA.bibleStart));
   set('d-vo2max',       DATA.vo2max);
@@ -468,6 +545,35 @@
 
   const pill = document.getElementById('d-phase-pill');
   if (pill) { pill.textContent = DATA.marathonPhase; pill.className = 'pill pill-' + DATA.marathonPhaseColor; }
+
+  /* ---- Net worth progress bar ---- */
+  const nwPct = Math.min(100, (DATA.netWorthValue / DATA.netWorthGoal) * 100);
+  document.getElementById('d-nw-bar').style.width = nwPct.toFixed(1) + '%';
+  document.getElementById('d-nw-pct').textContent = nwPct.toFixed(1) + '%';
+  document.getElementById('d-nw-current').textContent =
+    '$' + DATA.netWorthValue.toLocaleString() + ' CAD';
+
+  /* ---- Marathon training progress bar ---- */
+  const today = new Date();
+  const tStart = new Date(DATA.trainingStart);
+  const tEnd   = new Date(DATA.raceDay);
+  const totalDays   = (tEnd - tStart) / 86400000;
+  const elapsedDays = (today - tStart) / 86400000;
+  const trainPct    = Math.max(0, Math.min(100, (elapsedDays / totalDays) * 100));
+  const elapsedWeeks = (elapsedDays / 7).toFixed(1);
+  const totalWeeks   = (totalDays / 7).toFixed(0);
+  document.getElementById('d-train-bar').style.width = trainPct.toFixed(1) + '%';
+  document.getElementById('d-train-val').textContent =
+    'wk ' + elapsedWeeks + ' / ' + totalWeeks;
+
+  const fmt = (dt) => dt.toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' });
+  document.getElementById('d-train-start').textContent = fmt(tStart);
+  document.getElementById('d-train-end').textContent   = fmt(tEnd);
+
+  /* ---- Race countdown (auto) ---- */
+  const daysToRace = Math.ceil((tEnd - today) / 86400000);
+  const cd = document.getElementById('d-race-countdown');
+  if (cd) cd.textContent = daysToRace > 0 ? daysToRace + ' days' : 'race day';
 </script>
 
 </body>
