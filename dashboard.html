@@ -264,6 +264,34 @@
     font-size: 10px;
     color: var(--muted2);
   }
+
+  .verse {
+    padding: 8px 0 10px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .verse:last-child { border-bottom: none; padding-bottom: 0; }
+  .verse-ref {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent-amber);
+    margin-bottom: 6px;
+  }
+  .verse-text {
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text);
+    font-style: italic;
+  }
+  .verse-text .vnum {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    vertical-align: super;
+    font-style: normal;
+    margin-right: 2px;
+  }
 </style>
 </head>
 <body>
@@ -328,11 +356,11 @@
   <div class="card">
     <div class="card-head">
       <span class="card-label">marathon</span>
-      <span class="pill pill-amber" id="d-phase-pill">race week</span>
+      <span class="pill pill-amber" id="d-phase-pill">taper W-2</span>
     </div>
     <div class="stats-row">
       <div class="stat">
-        <div class="big-num" style="color:var(--accent-green);font-size:17px;line-height:1.2" id="d-target-race">Vancouver &middot; 3:38</div>
+        <div class="big-num" style="color:var(--accent-green);font-size:17px;line-height:1.2" id="d-target-race">Vancouver &middot; 3:29</div>
         <div class="big-label">next race target</div>
       </div>
       <div class="stat">
@@ -381,7 +409,7 @@
         <div class="race-name" style="color:var(--accent-green)">Vancouver</div>
         <div class="race-meta">May 3, 2026 &mdash; <span id="d-race-countdown">10 days</span></div>
       </div>
-      <div style="text-align:right"><div class="race-meta" style="color:var(--accent-green)">3:38 target</div></div>
+      <div style="text-align:right"><div class="race-meta" style="color:var(--accent-green)">3:29 target</div></div>
     </div>
     <div class="race-item">
       <div><div class="race-name">Toronto</div><div class="race-meta">Oct 2026</div></div>
@@ -470,6 +498,22 @@
     <div class="row"><span class="row-label">prerequisite</span><span class="row-val muted">financial independence</span></div>
   </div>
 
+  <!-- LIFE VERSE -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-label">life verse</span>
+      <span class="pill pill-amber">scripture</span>
+    </div>
+    <div class="verse">
+      <div class="verse-ref">2 Timothy 2:24 &middot; NLT</div>
+      <div class="verse-text"><span class="vnum">24</span>A servant of the Lord must not quarrel but must be kind to everyone, be able to teach, and be patient with difficult people.</div>
+    </div>
+    <div class="verse">
+      <div class="verse-ref">Romans 5:3&ndash;4 &middot; NLT</div>
+      <div class="verse-text"><span class="vnum">3</span>We can rejoice, too, when we run into problems and trials, for we know that they help us develop endurance. <span class="vnum">4</span>And endurance develops strength of character, and character strengthens our confident hope of salvation.</div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -484,9 +528,9 @@
     muscleMass:         '49.6',
     noColiStart:        '2026-04-24',      /* date you last reset — YYYY-MM-DD */
     bibleStart:         '2026-03-03',      /* date you started the streak */
-    marathonPhase:      'race week',
+    marathonPhase:      'taper W-2',
     marathonPhaseColor: 'amber',
-    targetRace:         'Vancouver \u00b7 3:38',
+    targetRace:         'Vancouver \u00b7 3:29',
     raceDay:            '2026-05-03',
     trainingStart:      '2025-11-21',      /* training block start */
     vo2max:             56,
